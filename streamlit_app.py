@@ -1,19 +1,20 @@
 import streamlit as st
 import requests
 
-# Function to get a response from an external API
 def get_api_response(user_input, conversation_history):
+    # Placeholder for your API URL
     api_url = "https://gqq75mttf2.execute-api.us-east-1.amazonaws.com/Test"
-    headers = {"Content-Type": "application/json"}
     payload = {
         "input": user_input,
         "conversation_history": conversation_history
     }
+    headers = {"Content-Type": "application/json"}
     
     try:
-        # Here, include the conversation history in your API request if needed
         response = requests.post(api_url, json=payload, headers=headers)
-        return response.json().get('response', 'No response from API')
+        # Make sure your API returns a response in the expected format
+        api_response = response.json().get('response', 'No response from API')
+        return api_response
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
@@ -24,24 +25,22 @@ def chat_interface():
     if 'conversation_history' not in st.session_state:
         st.session_state.conversation_history = []
 
-    # User input
-    user_input = st.text_input("Type your message here...", key="user_input")
+    user_input = st.text_input("Type your message here...", "")
 
-    # Handle the send action
     if st.button("Send") and user_input:
-        # Fetch response from API, including the conversation history as context if needed
+        # Fetch response from API
         response = get_api_response(user_input, st.session_state.conversation_history)
         
         # Update the conversation history
         st.session_state.conversation_history.append({"user": user_input, "bot": response})
 
-        # Display each part of the conversation
-        for exchange in st.session_state.conversation_history:
-            st.text_area("You", value=exchange['user'], height=75, disabled=True)
-            st.text_area("AI", value=exchange['bot'], height=150, disabled=True)
-        
-        # This workaround forces Streamlit to clear the input box after submission
+        # Clear the input (workaround by rerunning the app)
         st.experimental_rerun()
+
+    # Display conversation history
+    for index, exchange in enumerate(st.session_state.conversation_history):
+        st.text_area(label=f"You: ", value=exchange['user'], height=75, disabled=True, key=f"user_{index}")
+        st.text_area(label="AI: ", value=exchange['bot'], height=150, disabled=True, key=f"bot_{index}")
 
 if __name__ == "__main__":
     chat_interface()

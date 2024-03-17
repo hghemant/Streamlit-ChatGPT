@@ -16,9 +16,11 @@ def get_api_response(user_input, conversation_history):
         body_str = response.json().get('body', '{}')
         response_body = json.loads(body_str)if body_str else {}
         api_response = response_body.get('completion', 'No completion in response')
-        return response
+        return api_response
+    except json.JSONDecodeError as json_err:
+        return f" json parsing error: {str(json_err)}"
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        return f" an error: {str(e)}"
 
 def chat_interface():
     st.title("Chat Interface with History")
@@ -32,7 +34,6 @@ def chat_interface():
     if st.button("Send") and user_input:
 
         response = get_api_response(user_input, st.session_state.conversation_history)        
-        st.write(response)
         st.session_state.conversation_history.append({"user": user_input, "bot":  response})
 
         st.experimental_rerun()

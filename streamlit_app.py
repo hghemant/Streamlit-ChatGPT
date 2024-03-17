@@ -13,8 +13,8 @@ def get_api_response(user_input, conversation_history):
     try:
         response = requests.post(api_url, json=payload, headers=headers)
         #st.write(response)
-        #body_str = response.json().get('body', '{}')
-        #response_body = json.loads()
+        body_str = response.json().get('body', '{}')
+        response_body = json.loads()
         #api_response = response_body.get('completion', 'No completion in response')
         return response
     except Exception as e:
@@ -33,7 +33,7 @@ def chat_interface():
 
         response = get_api_response(user_input, st.session_state.conversation_history)        
         st.write(response)
-        st.session_state.conversation_history.append({"user": user_input, "bot": response})
+        st.session_state.conversation_history.append({"user": user_input, "bot":  st.write(response)})
 
         st.experimental_rerun()
 

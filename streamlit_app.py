@@ -6,8 +6,7 @@ def get_api_response(user_input):
     payload = {
         "input": user_input
     }
-    headers = {
-        "Authorization": "9GpKuYNB3e5HoRho7jfbDXaOO54Mpu95bXrBNFze",
+    headers = {        
         "Content-Type": "application/json"
     }
     

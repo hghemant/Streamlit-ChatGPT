@@ -15,41 +15,14 @@ def get_api_response(user_input, conversation_history):
     try:
         response = requests.post(api_url, json=payload, headers=headers)
 
-
-
         decoded_response = response.json()
-        print("Decoded JSON Response:", decoded_response)
+       
+        api_response = decoded_response.get('body', ' no response body')
 
-
-
-        body_content = decoded_response.get('body', '{}')
-        print("Body Content (Pre-Parsing):", body_content)
-
-
-        if isinstance(body_content, str):
-            try:
-                body = json.loads(body_content)
-            except json.JSONDecodeError:
-                print("Error parsing body string as JSON:", body_content)
-                body = {}  
-        else:
-            body = body_content  
-
-
-        print("Body Content (Post-Parsing):", body)
-
-
-        api_response = body.get('completion', 'No completion in response')
         return api_response
     except Exception as e:
         print(f"Error processing the response: {e}")
         return f"An error occurred: {str(e)}"
-
-
-
-
-
-
 
 def chat_interface():
     st.title("Chat Interface with History")

@@ -2,12 +2,12 @@ import streamlit as st
 import requests
 
 def get_api_response(user_input):
-    api_url = "https://your.api.endpoint"
+    api_url = "https://gqq75mttf2.execute-api.us-east-1.amazonaws.com/Test"
     payload = {
         "input": user_input
     }
     headers = {
-        "Authorization": "Bearer YOUR_API_KEY",
+        "Authorization": "9GpKuYNB3e5HoRho7jfbDXaOO54Mpu95bXrBNFze",
         "Content-Type": "application/json"
     }
     

@@ -13,22 +13,26 @@ def get_api_response(user_input, conversation_history):
     
     try:
         response = requests.post(api_url, json=payload, headers=headers)
-        # Check if the response is in JSON format
-        if response.headers.get('Content-Type') == 'application/json':
-            response_data = response.json()
-            # Debugging: Print raw response data
-            st.write("Raw response data:", response_data)
-            # Parse the 'body' if it is a string
-            if isinstance(response_data.get('body'), str):
-                response_body = json.loads(response_data.get('body'))
-                api_response = response_body.get('completion', 'No completion in response')
-                return api_response
+
+        print("Raw Response:", response.text)
+        
+
+        response_data = response.json()
+        if 'body' in response_data:
+            body_content = response_data['body']
+
+            if isinstance(body_content, str):
+                response_body = json.loads(body_content)
             else:
-                return "Error: Body is not a string."
+                response_body = body_content  # Assuming body_content is already a dict
+            api_response = response_body.get('completion', 'No completion in response')
         else:
-            return "Error: Response is not in JSON format."
+            api_response = 'No body in response'
+        return api_response
     except Exception as e:
+        print(f"Error processing the response: {e}")
         return f"An error occurred: {str(e)}"
+
 
 
 def chat_interface():

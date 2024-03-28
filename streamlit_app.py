@@ -1,31 +1,44 @@
 import streamlit as st
 import requests
-import json
 
 
-def get_api_response(user_input, conversation_history):
+def get_api_response(user_input, conversation_history, model_choice, top_k):
     api_url = "https://gqq75mttf2.execute-api.us-east-1.amazonaws.com/Test"
     payload = {
         "input": user_input,
-        "conversation_history": conversation_history
+        "conversation_history": conversation_history,
+        "model": model_choice,  # Adding the selected model to the payload
+        "top_k": top_k  # Adding the number of chunks to be retrieved
     }
     headers = {"Content-Type": "application/json"}
 
 
     try:
         response = requests.post(api_url, json=payload, headers=headers)
-
         decoded_response = response.json()
-       
         api_response = decoded_response.get('body', ' no response body')
-
         return api_response
     except Exception as e:
         print(f"Error processing the response: {e}")
         return f"An error occurred: {str(e)}"
 
+
 def chat_interface():
     st.title("Chat Interface with History")
+
+
+    # Dropdown for LLM Model selection
+    model_choice = st.sidebar.selectbox(
+        "LLM Model:",
+        ["Cohere", "Claude 3.0 (Haiku)", "Claude 3.0 (Sonnet)"]
+    )
+
+
+    # Dropdown for selecting number of chunks to be retrieved (top_k)
+    top_k = st.sidebar.selectbox(
+        "No. of chunks to be retrieved (top_k):",
+        [5, 8, 10]
+    )
 
 
     if 'conversation_history' not in st.session_state:
@@ -36,7 +49,7 @@ def chat_interface():
 
 
     if st.button("Send") and user_input:
-        response = get_api_response(user_input, st.session_state.conversation_history)
+        response = get_api_response(user_input, st.session_state.conversation_history, model_choice, top_k)
         st.session_state.conversation_history.append({"user": user_input, "bot": response})
         st.experimental_rerun()
 
@@ -48,6 +61,8 @@ def chat_interface():
 
 if __name__ == "__main__":
     chat_interface()
+
+
 
 
 

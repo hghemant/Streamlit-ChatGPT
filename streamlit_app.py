@@ -7,8 +7,8 @@ def get_api_response(user_input, conversation_history, model_choice, top_k):
     payload = {
         "input": user_input,
         "conversation_history": conversation_history,
-        "model": model_choice,  # Adding the selected model to the payload
-        "top_k": top_k  # Adding the number of chunks to be retrieved
+        "model": model_choice, 
+        "top_k": top_k  
     }
     headers = {"Content-Type": "application/json"}
 
@@ -27,14 +27,14 @@ def chat_interface():
     st.title("Chat Interface with History")
 
 
-    # Dropdown for LLM Model selection
+   
     model_choice = st.sidebar.selectbox(
         "LLM Model:",
         ["Cohere", "Claude 3.0 (Haiku)", "Claude 3.0 (Sonnet)"]
     )
 
 
-    # Dropdown for selecting number of chunks to be retrieved (top_k)
+   
     top_k = st.sidebar.selectbox(
         "No. of chunks to be retrieved (top_k):",
         [5, 8, 10]

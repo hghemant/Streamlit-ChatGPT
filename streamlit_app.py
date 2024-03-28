@@ -7,8 +7,8 @@ def get_api_response(user_input, conversation_history, model_choice, top_k):
     payload = {
         "input": user_input,
         "conversation_history": conversation_history,
-        "model": model_choice,  # Including the selected model in the payload
-        "top_k": top_k  # Including the number of chunks to be retrieved
+        "model": model_choice,  
+        "top_k": top_k 
     }
     headers = {"Content-Type": "application/json"}
 

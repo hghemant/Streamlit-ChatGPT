@@ -3,7 +3,7 @@ import requests
 
 
 def get_api_response(user_input, conversation_history, model_choice, top_k):
-    api_url = "https://gqq75mttf2.execute-api.us-east-1.amazonaws.com/Test"
+    
     payload = {
         "input": user_input,
         "conversation_history": conversation_history,
